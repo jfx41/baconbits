@@ -90,6 +90,9 @@ function bb_help_install {
 	if [ $# -gt 0 ]
 	then
 		case $1 in
+			b*)
+				echo "usage: $0 install baconbits"
+			;;
 			da*)
 				echo "usage: $0 install daq [ latest | <version> ]"
 			;;
@@ -109,8 +112,9 @@ function bb_help_install {
 
 	# Show full help
 	cat <<EOH
-usage: $0 install [ deps | snort | daq ]
+usage: $0 install [ baconbits | deps | snort | daq ]
 
+    baconbits: Installs BaconBits binary and libraries system wide
 	 deps: Installs dependencies.  Options: centos, redhat, ubuntu
 	  daq: Installs DAQ.  Options: latest, <version>
 		version: 2.0.x - Downloads version from archives.
@@ -146,6 +150,7 @@ function bb_help_uninstall {
 	if [ $# -gt 0 ]
 	then
 		case $1 in
+			b*) printf "usage $0 uninstall baconbits\n\n\tUninstalls BaconBits from the system.\n\n" ;;
 			d*) printf "usage $0 uninstall daq\n\n\tUninstalls the current version of DAQ.\n\n" ;;
 			s*) printf "usage: $0 uninstall snort <version>\n\n\tversion: Snort version number - 2.9.0.11\n\n" ;;
 			*)  echo "help uninstall: unrecognized options '$@'" ;;
