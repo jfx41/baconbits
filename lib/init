@@ -12,8 +12,9 @@ function bb_init {
 	fi
 
 	echo "Beginning BaconBits initialization ..."
-	bb_init_shim   # Install shell specific shims
-	bb_init_dirs   # Create directory structure
+	bb_init_shim $1  # Install shell specific shims
+	bb_init_dirs     # Create directory structure
+	echo "Initialization complete!"
 
 	exit 0
 }
@@ -50,6 +51,7 @@ function bb_init_dirs {
 function bb_init_shim {
 	shell=$(basename $SHELL)
 
+	printf "\t* Installing Oinkcode into $shell profile\n"
 	if [ $shell == "bash" ]
 	then
 		bb_shim_bash $1
@@ -57,7 +59,7 @@ function bb_init_shim {
 	then
 		bb_shim_zsh $1
 	else
-		echo "ERROR: Unsupported shell '$shell'" > /dev/stderr
+		printf "\tERROR: Unsupported shell '$shell'\n" > /dev/stderr
 		exit 0
 	fi
 }
