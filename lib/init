@@ -1,11 +1,4 @@
 #!/bin/bash
-
-# Use $HOME for the base directory
-if [ -z $BACONBITS_DIR ]
-then
-	BACONBITS_DIR=$HOME/.baconbits
-fi
-
 #
 # Initialize and install BaconBits
 #
