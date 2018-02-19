@@ -1,0 +1,40 @@
+#!/bin/bash
+
+#
+# Main installation option routing
+#
+function bb_install {
+	case $1 in
+		b*) bb_install_baconbits ;;
+		d*) shift; bb_install_daq $@ ;;
+		s*) shift; bb_install_snort $@ ;;
+		*) echo "install: unrecognized options '$@'" ;;
+	esac
+
+	exit 0
+}
+
+#
+# Initialize and install BaconBits
+#
+function bb_install_baconbits {
+	# Install BaconBits binary and libraries
+	echo "Beginning BaconBits installation ..."
+	printf "\t* Installing BaconBits binary to: /usr/bin/baconbits\n"
+	sudo cp baconbits $BACONBITS_BIN
+
+	# Share directory doesn't exist
+	if [ ! -d $BACONBITS_SHARE ]
+	then
+		printf "\t* Creating BaconBits share directory: $BACONBITS_SHARE\n"
+		sudo mkdir $BACONBITS_SHARE
+	fi
+
+	# Copy the lib directory
+	printf "\t* Installing BaconBits libraries to: $BACONBITS_SHARE/lib\n"
+	sudo cp -rf lib/ $BACONBITS_SHARE
+
+	exit 0
+}
+
+# EOF
