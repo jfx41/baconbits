@@ -1,13 +1,4 @@
-BACONBITS_SHARE="/usr/share/baconbits"
-
-# If it doesn't exist use local libs
-if [ ! -d $BACONBITS_SHARE ]
-then
-	BACONBITS_LIB="lib" # Use local libs
-# Use system installed libs
-else
-	BACONBITS_LIB="$BACONBITS_SHARE/lib"
-fi
+#!/bin/bash
 
 #
 # Dynamically loads BaconBits libraries
@@ -18,9 +9,18 @@ function bb_loader {
 	# Load all the libraries requested
 	for lib in $@
 	do
-		if [ -f $BACONBITS_LIB/$lib ]
+		tmp=$(basename $lib) # Just the file name
+
+		# Don't double load ourself
+		if [ $tmp == "loader" ]
 		then
-			.$BACONBITS_LIB/$lib
+			continue
+		fi
+
+		# If the library exists, load it
+		if [ -f $lib ]
+		then
+			. $lib
 		else
 			echo "WARNING: Unknown library '$lib'" > /dev/stderr
 			warn=1
