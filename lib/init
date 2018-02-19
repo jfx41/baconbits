@@ -1,9 +1,27 @@
 #!/bin/bash
+
 #
 # Initialize and install BaconBits
 #
 function bb_init {
+	# Check for Oinkcode
+	if [ $# -ne 1 ]
+	then
+		echo "ERROR: Initialization requires an Oinkcode!  Try: $0 help init"
+		exit 1
+	fi
+
 	echo "Beginning BaconBits initialization ..."
+	bb_init_shim   # Install shell specific shims
+	bb_init_dirs   # Create directory structure
+
+	exit 0
+}
+
+#
+# Initializes the BaconBits local directory structure for the user
+#
+function bb_init_dirs {
 	# If the base directory doesn't exist, create it
 	if [ ! -d $BACONBITS_DIR ]
 	then
@@ -23,27 +41,53 @@ function bb_init {
 		echo
 	done
 
-	# BaconBits hasn't been installed yet or is partially installed
-	if [ ! -d $BACONBITS_SHARE -o ! -f $BACONBITS_BIN ]
+	return
+}
+
+#
+# Shim either bash or zsh
+#
+function bb_init_shim {
+	shell=$(basename $SHELL)
+
+	if [ $shell == "bash" ]
 	then
-		printf "\t* Installing BaconBits binary to: /usr/bin/baconbits\n"
-		sudo cp baconbits $BACONBITS_BIN
-
-		# Share directory doesn't exist
-		if [ ! -d $BACONBITS_SHARE ]
-		then
-			printf "\t* Creating BaconBits share directory: $BACONBITS_SHARE\n"
-			sudo mkdir $BACONBITS_SHARE
-		fi
-
-		# Copy the lib directory
-		printf "\t* Installing BaconBits libraries to: $BACONBITS_SHARE/lib\n"
-		sudo cp -rf lib/ $BACONBITS_SHARE
+		bb_shim_bash $1
+	elif [ $shell == "zsh" ]
+	then
+		bb_shim_zsh $1
+	else
+		echo "ERROR: Unsupported shell '$shell'" > /dev/stderr
+		exit 0
 	fi
+}
 
-	echo "Finished initialization."
+#
+# Add the Oinkcode to the bash shell environment
+#
+function bb_shim_bash {
+	cat <<EOS >> $HOME/.bash_profile
 
-	exit 0
+# BaconBits Oinkcode ENV variable
+export BACONBITS_OINKCODE=$1
+
+EOS
+
+	return 0
+}
+
+#
+# Add the Oinkcode to the zsh shell environment
+#
+function bb_shim_zsh {
+	cat <<EOS >> $HOME/.zprofile
+
+# BaconBits Oinkcode ENV variable
+export BACONBITS_OINKCODE=$1
+
+EOS
+
+	return 0
 }
 
 # EOF
