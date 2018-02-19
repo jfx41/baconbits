@@ -1,0 +1,248 @@
+#!/bin/bash
+
+##
+#
+# Main controller for BaconBits options
+#
+##
+function main {
+	# No args, show help
+	if [ $# -lt 1 ]
+	then
+		bb_help
+	fi
+
+	# Parse first option and look for where to route it
+	case $1 in
+		c*)
+			shift
+			bb_clean $@
+		;;
+		h*)
+			shift
+			bb_help $@
+		;;
+		ini*)
+			shift
+			bb_init $@
+		;;
+		ins*)
+			shift
+			bb_install $@
+		;;
+		s*)
+			shift
+			bb_show $@
+		;;
+		un*)
+			shift
+			bb_uninstall $@
+		;;
+		up*)
+			shift
+			bb_update $@
+		;;
+		us*)
+			shift
+			bb_use $@
+		;;
+		*)
+			echo "ERROR: unrecognized options: $@"
+			exit 1
+		;;
+	esac
+
+	exit 0
+}
+
+# Help is on the way
+function bb_help {
+	# Show basic help
+	if [ $# -lt 1 ]
+	then
+		echo "usage: $0 [ clean | help | init | install | show | uninstall | update | use ]"
+		exit 0
+	fi
+
+	# We have arguments parse them and route them appropriately
+	case $1 in
+		c*)
+			shift
+			bb_help_clean $@
+		;;
+		h*)
+			shift
+			bb_help_help $@
+		;;
+		ini*)
+			shift
+			bb_help_init $@
+		;;
+		ins*)
+			shift
+			bb_help_install $@
+		;;
+		s*)
+			shift
+			bb_help_show $@
+		;;
+		un*)
+			shift
+			bb_help_uninstall $@
+		;;
+		up*)
+			shift
+			bb_help_update $@
+		;;
+		us*)
+			shift
+			bb_help_use $@
+		;;
+		*)
+			echo "help: unrecognized options '$@'"
+			exit 1
+		;;
+	esac
+
+	exit 0
+}
+
+# help clean
+function bb_help_clean {
+	cat <<EOH
+usage: $0 clean [ snort | daq | rules | all ]
+
+	snort: Removes snort-*.tar.gz files
+	  daq: Removes daq-*.tar.gz files
+	rules: Remoes snortrules-snapshot-*.tar.gz files
+	  all: Removes Snort, DAQ, and rules .tar.gz files
+
+EOH
+	exit 0
+}
+
+# help help
+function bb_help_help {
+	echo "usage: $0 help [ clean | help | install | show | uninstall | update | use ]"
+	exit 0
+}
+
+# help init
+function bb_help_init {
+	cat <<EOH
+usage: $0 init
+
+	Initializes the BaconBits directory structure.
+
+EOH
+
+	exit 0
+}
+
+# help install
+function bb_help_install {
+	# We have options, route them
+	if [ $# -gt 0 ]
+	then
+		case $1 in
+			da*)
+				echo "usage: $0 install daq [ latest | <version> ]"
+			;;
+			de*)
+				echo "usage: $0 install deps [ centos | redhat | ubuntu ]"
+			;;
+			s*)
+				echo "usage: $0 install snort [ latest | <version> ]"
+			;;
+			*)
+				echo "help install: unrecognized options '$@'"
+			;;
+		esac
+
+		exit 0
+	fi
+
+	# Show full help
+	cat <<EOH
+usage: $0 install [ deps | snort | daq ]
+
+	 deps: Installs dependencies.  Options: centos, redhat, ubuntu
+	  daq: Installs DAQ.  Options: latest, <version>
+		version: 2.0.x - Downloads version from archives.
+	snort: Installs Snort.  Options: latest, <version>
+		version: 2.9.x.x - Downloads version from archives.
+EOH
+	exit 0
+}
+
+# help show
+function bb_help_show {
+	# We have options, route them
+	if [ $# -gt 0 ]
+	then
+		case $1 in
+			a*) echo "available: Shows currently installed versions of Snort and DAQ" ;;
+			l*) echo "latest: Shows you the latest versions of Snort and DAQ available from snort.org" ;;
+			*)  echo "help show: unrecognized options '$@'" ;;
+		esac
+		exit 0
+	fi
+
+	# basic help
+	cat <<EOH
+usage: $0 show [ available | latest ]
+EOH
+	exit 0
+}
+
+# help uninstall
+function bb_help_uninstall {
+	# We have options, route them
+	if [ $# -gt 0 ]
+	then
+		case $1 in
+			d*) printf "usage $0 uninstall daq\n\n\tUninstalls the current version of DAQ.\n\n" ;;
+			s*) printf "usage: $0 uninstall snort <version>\n\n\tversion: Snort version number - 2.9.0.11\n\n" ;;
+			*)  echo "help uninstall: unrecognized options '$@'" ;;
+		esac
+		exit 0
+	fi
+
+	# Basic help
+	echo "usage: $0 uninstall [ daq | snort <version> ]"
+
+	exit 0
+}
+
+# help update
+function bb_help_update {
+	# Full help
+	cat <<EOH
+usage: $0 update [ rules | so ]
+
+	rules: Updates to the latest Snort rules from snort.org
+	   so: Updates the Shared Object rules from the latest rules from snort.org
+
+EOH
+
+	exit 0
+}
+
+# help use
+function bb_help_use {
+	# Full help
+	cat <<EOH
+usage: $0 use [ latest | <version> ]
+
+	 latest: Uses the most recent version of Snort installed on the system
+	version: Uses a specific version of Snort.  Example: 2.9.0.11
+
+EOH
+
+	exit 0
+}
+
+# Let it begin
+main $@
+
+# EOF
