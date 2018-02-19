@@ -1,0 +1,53 @@
+#!/bin/bash
+
+url="https://snort.org"
+
+#
+# Checks snort.org and pulls the latest Snort version info
+#
+function latest_snort {
+	curl -s $url/downloads | grep -oP 'snort-2\.\d+?\.\d+?(\.\d+?)?\.tar\.gz' | uniq
+}
+
+#
+# Checks snort.org and pulls the latest DAQ version info
+#
+function latest_daq {
+	curl -s $url/downloads | grep -oP 'daq-2\.0\.\d+?(\.\d+?)?\.tar\.gz' | uniq
+}
+
+#
+# Checks snort.org and pulls the latest rules version info
+#
+function latest_rules {
+	# Insert latest rules code
+}
+
+#
+# Downloads the latest DAQ version from snort.org
+#
+function bb_download_daq {
+	# Insert download code
+}
+
+#
+# Downloads the latest Snort version from snort.org
+#
+function bb_download_snort {
+	# Insert download code
+}
+
+#
+# Downloads specified version of Snort from the archives on snort.org
+#
+function bb_download_snort_version {
+	# Insert archive download support
+}
+
+# Downloads specified version of DAQ from the archives on snort.org
+#
+function bb_download_daq_version {
+	# Insert archive download support
+}
+
+# EOF
