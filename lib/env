@@ -1,0 +1,5 @@
+# Directory structure to create
+BACONBITS_DIRS="daq rules src versions"
+BACONBITS_BIN="/usr/bin/baconbits"
+BACONBITS_SHARE="/usr/share/baconbits"
+
