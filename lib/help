@@ -75,9 +75,9 @@ function bb_help_help {
 # help init
 function bb_help_init {
 	cat <<EOH
-usage: $0 init
+usage: $0 init <oinkcode>
 
-	Initializes the BaconBits directory structure.
+	Initializes the BaconBits directory structure and configuration
 
 EOH
 
