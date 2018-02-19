@@ -1,0 +1,33 @@
+BACONBITS_SHARE="/usr/share/baconbits"
+
+# If it doesn't exist use local libs
+if [ ! -d $BACONBITS_SHARE ]
+then
+	BACONBITS_LIB="lib" # Use local libs
+# Use system installed libs
+else
+	BACONBITS_LIB="$BACONBITS_SHARE/lib"
+fi
+
+#
+# Dynamically loads BaconBits libraries
+#
+function bb_loader {
+	warn=0 # Default to a clean return with no warnings
+
+	# Load all the libraries requested
+	for lib in $@
+	do
+		if [ -f $BACONBITS_LIB/$lib ]
+		then
+			.$BACONBITS_LIB/$lib
+		else
+			echo "WARNING: Unknown library '$lib'" > /dev/stderr
+			warn=1
+		fi
+	done
+
+	return $warn
+}
+
+# EOF
