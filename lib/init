@@ -1,0 +1,50 @@
+# Use $HOME for the base directory
+if [ -z $BACONBITS_DIR ]
+then
+	BACONBITS_DIR=$HOME/.baconbits
+fi
+
+# Directory structure to create
+BACONBITS_DIRS="daq rules src versions"
+BACONBITS_BIN="/usr/bin/baconbits"
+BACONBITS_SHARE="/usr/share/baconbits"
+
+#
+# Initialize and install BaconBits
+#
+function bb_init {
+	# If the base directory doesn't exist, create it
+	if [ ! -d $BACONBITS_DIR ]
+	then
+		mkdir $BACONBITS_DIR
+	fi
+
+	# We will try and gracefully handle partially initialized directories
+	for dir in $BACONBITS_DIRS
+	do
+		dir=$BACONBITS_DIR/$dir
+		if [ ! -d $dir ]
+		then
+			mkdir =pv $dir
+		fi
+	done
+
+	# BaconBits hasn't been installed yet or is partially installed
+	if [ ! -d $BACONBITS_SHARE -o ! -f $BACONBITS_BIN ]
+	then
+		sudo cp -v baconbits $BACONBITS_BIN
+
+		# Share directory doesn't exist
+		if [ ! -d $BACONBITS_SHARE ]
+		then
+			sudo mkdir -pv $BACONBITS_SHARE
+		fi
+
+		# Copy the lib directory
+		sudo cp -rfv lib $BACONBITS_SHARE
+	fi
+
+	exit 0
+}
+
+# EOF
