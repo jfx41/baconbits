@@ -38,8 +38,8 @@ function bb_init_dirs {
 		then
 			printf "\t\t* $dir2"
 			mkdir -p $dir2
+			echo
 		fi
-		echo
 	done
 
 	return
@@ -51,7 +51,7 @@ function bb_init_dirs {
 function bb_init_shim {
 	shell=$(basename $SHELL)
 
-	printf "\t* Installing Oinkcode into $shell profile\n"
+	printf "\t* Installing Oinkcode into .${shell}rc\n"
 	if [ $shell == "bash" ]
 	then
 		bb_shim_bash $1
@@ -68,12 +68,21 @@ function bb_init_shim {
 # Add the Oinkcode to the bash shell environment
 #
 function bb_shim_bash {
-	cat <<EOS >> $HOME/.bash_profile
+	rc="$HOME/.bashrc"
+	check=$(grep BACONBITS_OINKCODE $rc)
+
+	# If one doesn't already exist
+	if [ -z "$check" ]
+	then
+		cat <<EOS >> $rc
 
 # BaconBits Oinkcode ENV variable
 export BACONBITS_OINKCODE=$1
 
 EOS
+	else
+		echo "BACONBITS_OINKCODE found in $rc" > /dev/stderr
+	fi
 
 	return 0
 }
@@ -82,12 +91,22 @@ EOS
 # Add the Oinkcode to the zsh shell environment
 #
 function bb_shim_zsh {
-	cat <<EOS >> $HOME/.zprofile
+	rc="$HOME/.zshrc"
+	check=$(grep BACONBITS_OINKCODE $rc)
+
+	# If one doesn't already exist
+	if [ -z "$check" ]
+	then
+
+		cat <<EOS >> $rc
 
 # BaconBits Oinkcode ENV variable
 export BACONBITS_OINKCODE=$1
 
 EOS
+	else
+		echo "BACONBITS_OINKCODE found in $rc" > /dev/stderr
+	fi
 
 	return 0
 }
