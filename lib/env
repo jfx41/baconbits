@@ -2,9 +2,19 @@
 
 # Directory structure to create
 BACONBITS_DIRS="daq rules src versions"
-BACONBITS_DIR="$HOME/.baconbits"
-BACONBITS_BIN="/usr/bin/baconbits"
-BACONBITS_SHARE="/usr/share/baconbits"
-BACONBITS_LIB="/usr/share/baconbits/lib"
+
+# If these are already set a user is configuring them locally
+if [ -z "$BACONBITS_DIR" ]
+then
+	BACONBITS_DIR="$HOME/.baconbits"
+elif [ -z "$BACONBITS_BIN" ]
+then
+	BACONBITS_BIN="/usr/bin/baconbits"
+elif [ -z "$BACONBITS_SHARE" ]
+	BACONBITS_SHARE="/usr/share/baconbits"
+elif [ -z "$BACONBITS_LIB" ]
+then
+	BACONBITS_LIB="/usr/share/baconbits/lib"
+fi
 
 # EOF
