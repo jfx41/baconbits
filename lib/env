@@ -11,6 +11,7 @@ elif [ -z "$BACONBITS_BIN" ]
 then
 	BACONBITS_BIN="/usr/bin/baconbits"
 elif [ -z "$BACONBITS_SHARE" ]
+then
 	BACONBITS_SHARE="/usr/share/baconbits"
 elif [ -z "$BACONBITS_LIB" ]
 then
