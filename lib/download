@@ -1,53 +1,66 @@
 #!/bin/bash
 
-url="https://snort.org"
+url="https://snort.org"             # Base URL
+downloads="$url/downloads"          # Download URL
+src="$downloads/snort"              # Source URL
+rules="$downloads/snort/registered" # Rules URL
 
 #
 # Checks snort.org and pulls the latest Snort version info
 #
-function latest_snort {
-	curl -s $url/downloads | grep -oP 'snort-2\.\d+?\.\d+?(\.\d+?)?\.tar\.gz' | uniq
+function bb_latest_snort {
+	curl -s $downloads | grep -oP 'snort-2\.\d+?\.\d+?(\.\d+?)?\.tar\.gz' | uniq
 }
 
 #
 # Checks snort.org and pulls the latest DAQ version info
 #
-function latest_daq {
-	curl -s $url/downloads | grep -oP 'daq-2\.0\.\d+?(\.\d+?)?\.tar\.gz' | uniq
+function bb_latest_daq {
+	curl -s $downloads | grep -oP 'daq-2\.0\.\d+?(\.\d+?)?\.tar\.gz' | uniq
 }
 
 #
 # Checks snort.org and pulls the latest rules version info
 #
-function latest_rules {
-	# Insert latest rules code
+function bb_latest_rules {
+	curl -s $downloads | grep -oP 'snortrules-snapshot-29\d{3}\.tar\.gz' | head -1
 }
 
 #
 # Downloads the latest DAQ version from snort.org
 #
 function bb_download_daq {
-	# Insert download code
+	latest_daq=$(bb_latest_daq)
+	curl -s $src/$latest_daq -o $BACONBITS_SRC/$latest_daq
 }
 
 #
 # Downloads the latest Snort version from snort.org
 #
 function bb_download_snort {
-	# Insert download code
+	latest_snort=$(bb_latest_snort)
+	curl -s $src/$latest_snort -o $BACONBITS_SRC/$latest_snort
+}
+
+#
+# Download the latest Snort rules from snort.org
+#
+function bb_download_rules {
+	latest_rules=$(bb_latest_rules)
+	curl -s $rules/$latest_rules?oinkcode=$BACONBITS_OINKCODE -o $BACONBITS_SRC/$latest_rules
 }
 
 #
 # Downloads specified version of Snort from the archives on snort.org
 #
-function bb_download_snort_version {
+#function bb_download_snort_version {
 	# Insert archive download support
-}
+#}
 
 # Downloads specified version of DAQ from the archives on snort.org
 #
-function bb_download_daq_version {
+#function bb_download_daq_version {
 	# Insert archive download support
-}
+#}
 
 # EOF
