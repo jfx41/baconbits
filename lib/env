@@ -16,6 +16,13 @@ then
 elif [ -z "$BACONBITS_LIB" ]
 then
 	BACONBITS_LIB="/usr/share/baconbits/lib"
+elif [ -z "$BACONBITS_SNORT_OPTS" ]
+then
+	BACONBITS_SNORT_OPTS="--enable-sourcefire --enable-ipv6 --enable-gre --enable-mpls --enable-targetbased --enable-decoder-preprocessor-rules --enable-ppm --enable-perfprofiling --enable-zlib --enable-active-response --enable-normalizer --enable-reload --enable-react --enable-flexresp3 --enable-debug --enable-debug-msgs"
+elif [ -z "$BACONBITS_DAQ_OPTS" ]
+then
+	BACONBITS_DAQ_OPTS=""
+
 fi
 
 # EOF
