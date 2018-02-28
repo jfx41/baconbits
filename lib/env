@@ -7,6 +7,10 @@ BACONBITS_DIRS="daq rules src versions"
 if [ -z "$BACONBITS_DIR" ]
 then
 	BACONBITS_DIR="$HOME/.baconbits"
+if [ -z "$BACONBITS_DAQ_DIR" ]
+then
+	BACONBITS_DAQ_DIR="$BACONBITS_DIR/daq"
+
 elif [ -z "$BACONBITS_BIN" ]
 then
 	BACONBITS_BIN="/usr/bin/baconbits"
