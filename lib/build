@@ -1,0 +1,57 @@
+#!/bin/bash
+
+#
+#
+# Takes a version and unpacks and compiles Snort
+#
+#
+function bb_build_daq {
+	version="$1"              # 2.0.6
+	src="daq-$version.tar.gz" # snort-2.9.11.1.tar.gz
+	dir=${src%%.tar.gz}       # snort-2.9.11.1
+
+	build_options=$BACONBITS_DAQ_OPTS
+	prefix=$BACONBITS_DAQ_DIR
+
+	# One make thread per CPU
+	cpus=$(grep ^processor /proc/cpuinfo | wc -l)
+
+	# Go to the source directory and untar Snort
+	cd $BACONBITS_SRC
+	tar xzvf $src
+	cd $dir
+
+	# Configure Snort and run a multithreaded make
+	./configure --prefix=$prefix $build_options
+	make -j $cpus
+	make -j $cpus install
+}
+
+#
+#
+# Takes a version and unpacks and compiles Snort
+#
+#
+function bb_build_snort {
+	version="$1"                # 2.9.11.1
+	src="snort-$version.tar.gz" # snort-2.9.11.1.tar.gz
+	dir=${src%%.tar.gz}         # snort-2.9.11.1
+
+	build_options="$BACONBITS_SNORT_OPTS --with-daq-libs=$BACONBITS_DAQ_DIR"
+	prefix=$BACONBITS_DIR/$version
+
+	# One make thread per CPU
+	cpus=$(grep ^processor /proc/cpuinfo | wc -l)
+
+	# Go to the source directory and untar Snort
+	cd $BACONBITS_SRC
+	tar xzvf $src
+	cd $dir
+
+	# Configure Snort and run a multithreaded make
+	./configure --prefix=$prefix $build_options
+	make -j $cpus
+	make -j $cpus install
+}
+
+# EOF
