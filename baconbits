@@ -67,7 +67,7 @@ function main {
 			bb_use $@
 		;;
 		*)
-			echo "ERROR: unrecognized options: $@"
+			echo "ERROR: unrecognized options: '$@'. Try: $0 help"
 			exit 1
 		;;
 	esac
