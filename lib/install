@@ -37,4 +37,15 @@ function bb_install_baconbits {
 	exit 0
 }
 
+#
+# Install Snort
+#
+function bb_install_snort {
+	bb_download_snort
+}
+
+function bb_install_daq {
+	bb_download_daq
+}
+
 # EOF
