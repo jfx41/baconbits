@@ -2,6 +2,29 @@
 
 #
 #
+# Takes a version and package to ensure the source exists
+#
+#
+function bb_src_check {
+	if [ -z "$1" ]
+	then
+		echo "ERROR: bb_build_check - Requires argument: [daq|snort]-<version>.tar.gz"
+		return 1
+	fi
+
+	src="$BACONBITS_SRC/$1"
+
+	# Check to make sure it exists
+	if [ -f $src ]
+	then
+		return 0
+	else
+		return 1
+	fi
+}
+	
+#
+#
 # Takes a version and unpacks and compiles Snort
 #
 #
@@ -9,6 +32,14 @@ function bb_build_daq {
 	version="$1"              # 2.0.6
 	src="daq-$version.tar.gz" # snort-2.9.11.1.tar.gz
 	dir=${src%%.tar.gz}       # snort-2.9.11.1
+
+	# Check and make sure the source.tar.gz exists
+	check=$(bb_src_check $src)
+	if [ $check == 1 ]
+	then
+		echo "ERROR: bb_build_daq - $src does not exist."
+		return 1
+	fi
 
 	build_options=$BACONBITS_DAQ_OPTS
 	prefix=$BACONBITS_DAQ_DIR
@@ -36,6 +67,14 @@ function bb_build_snort {
 	version="$1"                # 2.9.11.1
 	src="snort-$version.tar.gz" # snort-2.9.11.1.tar.gz
 	dir=${src%%.tar.gz}         # snort-2.9.11.1
+
+	# Check and make sure the source.tar.gz exists
+	check=$(bb_src_check $src)
+	if [ $check == 1 ]
+	then
+		echo "ERROR: bb_build_snort - $src does not exist."
+		return 1
+	fi
 
 	build_options="$BACONBITS_SNORT_OPTS --with-daq-libs=$BACONBITS_DAQ_DIR"
 	prefix=$BACONBITS_DIR/$version
